@@ -26,6 +26,9 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import com.sk89q.worldedit.regions.Region;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -34,6 +37,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import static java.lang.Integer.parseInt;
 
 /**
  *
@@ -44,9 +48,9 @@ public class ProjectArea extends ProjectCommand {
     public Region weRegion;
 
     public ProjectArea(String... permissionNodes) {
-        super(3, true, permissionNodes);
+        super(4, true, permissionNodes);
         setShortDescription(": You can add or remove one region from a project ");
-        setUsageDescription(" <ProjectName> add|remove <RegionName>: Add or remove a region of a project");
+        setUsageDescription(" <ProjectName> add|remove <RegionName> <weight>: Add or remove a region of a project");
     }
 
     private boolean manager;
@@ -64,98 +68,11 @@ public class ProjectArea extends ProjectCommand {
             if (PluginData.projectsAll.containsKey(args[0])) {
                 if (playerPermission(args[0], cs)) {
                     if (args[1].equalsIgnoreCase("add")) {
-
+                        List l = new ArrayList<>();
                         if (PluginData.regionsReadable.containsKey(PluginData.projectsAll.get(args[0]).idproject)) {
-                            if (!PluginData.regionsReadable.get(PluginData.projectsAll.get(args[0]).idproject).contains(args[2])) {
-                                try {
-                                    WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
-
-                                    weRegion = worldEdit.getSession(pl).getSelection(worldEdit.getSession(pl).getSelectionWorld());
-
-                                    if (!(weRegion instanceof com.sk89q.worldedit.regions.CuboidRegion || weRegion instanceof Polygonal2DRegion)) {
-                                        sendInvalidSelection(pl);
-
-                                    } else if (weRegion instanceof Polygonal2DRegion) {
-
-                                        new BukkitRunnable() {
-
-                                            @Override
-                                            public void run() {
-
-                                                try {
-                                                    PrismoidRegion r = new PrismoidRegion(loc, (com.sk89q.worldedit.regions.Polygonal2DRegion) weRegion);
-
-                                                    String stat = "INSERT INTO " + Mcproject.getPluginInstance().database + ".mcmeproject_regions_data (idproject, idregion, name, type, xlist, zlist, ymin, ymax, location, server ) VALUES ('" + PluginData.getProjectsAll().get(args[0]).idproject.toString() + "','" + PluginData.createId().toString() + "','" + args[2] + "','prismoid','" + serialize(r.getXPoints()) + "','" + serialize(r.getZPoints()) + "','" + r.getMinY() + "','" + r.getMaxY() + "','" + pl.getLocation().getWorld().getUID().toString() + ";" + pl.getLocation().getX() + ";" + pl.getLocation().getY() + ";" + pl.getLocation().getZ() + "','" + Mcproject.getPluginInstance().nameserver + "' ) ;";
-                                                    Mcproject.getPluginInstance().con.prepareStatement(stat).executeUpdate(stat);
-                                                    PluginData.loadRegions();
-                                                    PluginData.loadWarps();
-                                                    Mcproject.getPluginInstance().sendReload(pl, "regions");
-                                                    Mcproject.getPluginInstance().sendReload(pl, "warps");
-
-                                                } catch (SQLException ex) {
-                                                    Logger.getLogger(ProjectFinish.class.getName()).log(Level.SEVERE, null, ex);
-                                                }
-
-                                            }
-
-                                        }.runTaskAsynchronously(Mcproject.getPluginInstance());
-
-                                        try {
-                                            DynmapUtil.createMarker(args[2], args[0], weRegion);
-                                        } catch (NullPointerException e) {
-
-                                        }
-
-                                        sendDone(cs);
-                                    } else if (weRegion instanceof com.sk89q.worldedit.regions.CuboidRegion) {
-
-                                        new BukkitRunnable() {
-
-                                            @Override
-                                            public void run() {
-
-                                                try {
-                                                    CuboidRegion r = new CuboidRegion(loc, (com.sk89q.worldedit.regions.CuboidRegion) weRegion);
-                                                    Vector minCorner = r.getMinCorner();
-                                                    Vector maxCorner = r.getMaxCorner();
-
-                                                    String stat = "INSERT INTO " + Mcproject.getPluginInstance().database + ".mcmeproject_regions_data (idproject, idregion, name, type, xlist, zlist, ymin, ymax, location, server ) VALUES ('" + PluginData.getProjectsAll().get(args[0]).idproject.toString() + "','" + PluginData.createId().toString() + "','" + args[2] + "','cuboid','" + minCorner.getBlockX() + ";" + maxCorner.getBlockX() + "','" + minCorner.getBlockZ() + ";" + maxCorner.getBlockZ() + "','" + minCorner.getBlockY() + "','" + maxCorner.getBlockY() + "','" + pl.getLocation().getWorld().getUID().toString() + ";" + pl.getLocation().getX() + ";" + pl.getLocation().getY() + ";" + pl.getLocation().getZ() + "','" + Mcproject.getPluginInstance().nameserver + "' ) ;";
-                                                    Mcproject.getPluginInstance().con.prepareStatement(stat).executeUpdate(stat);
-                                                    PluginData.loadRegions();
-                                                    PluginData.loadWarps();
-                                                    Mcproject.getPluginInstance().sendReload(pl, "regions");
-                                                    Mcproject.getPluginInstance().sendReload(pl, "warps");
-
-                                                } catch (SQLException ex) {
-                                                    Logger.getLogger(ProjectFinish.class.getName()).log(Level.SEVERE, null, ex);
-                                                }
-
-                                            }
-
-                                        }.runTaskAsynchronously(Mcproject.getPluginInstance());
-
-                                        try {
-                                            DynmapUtil.createMarker(args[2], args[0], weRegion);
-                                        } catch (NullPointerException e) {
-
-                                        }
-
-                                        sendDone(cs);
-                                    }
-                                } catch (IncompleteRegionException | NullPointerException ex) {
-
-                                    Logger.getLogger(ProjectArea.class.getName()).log(Level.SEVERE, null, ex);
-                                    if (ex instanceof NullPointerException) {
-                                        sendInvalidSelection(pl);
-                                    }
-                                }
-
-                            } else {
-                                sendRegion(cs, args[2], args[0]);
-
-                            }
-                        } else {
-
+                            l = createList(PluginData.projectsAll.get(args[0]).idproject);
+                        }
+                        if (!l.contains(args[2].toLowerCase()) || l.isEmpty()) {
                             try {
                                 WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
 
@@ -171,18 +88,22 @@ public class ProjectArea extends ProjectCommand {
                                         @Override
                                         public void run() {
 
+                                            PrismoidRegion r = new PrismoidRegion(loc, (com.sk89q.worldedit.regions.Polygonal2DRegion) weRegion);
                                             try {
-                                                PrismoidRegion r = new PrismoidRegion(loc, (com.sk89q.worldedit.regions.Polygonal2DRegion) weRegion);
-
-                                                String stat = "INSERT INTO " + Mcproject.getPluginInstance().database + ".mcmeproject_regions_data (idproject, idregion, name, type, xlist, zlist, ymin, ymax, location, server ) VALUES ('" + PluginData.getProjectsAll().get(args[0]).idproject.toString() + "','" + PluginData.createId().toString() + "','" + args[2] + "','prismoid','" + serialize(r.getXPoints()) + "','" + serialize(r.getZPoints()) + "','" + r.getMinY() + "','" + r.getMaxY() + "','" + pl.getLocation().getWorld().getUID().toString() + ";" + pl.getLocation().getX() + ";" + pl.getLocation().getY() + ";" + pl.getLocation().getZ() + "','" + Mcproject.getPluginInstance().nameserver + "' ) ;";
+                                                String stat = "INSERT INTO " + Mcproject.getPluginInstance().database + ".mcmeproject_regions_data (idproject, idregion, name, type, xlist, zlist, ymin, ymax, location, server, weight ) VALUES ('" + PluginData.getProjectsAll().get(args[0]).idproject.toString() + "','" + PluginData.createId().toString() + "','" + args[2] + "','prismoid','" + serialize(r.getXPoints()) + "','" + serialize(r.getZPoints()) + "','" + r.getMinY() + "','" + r.getMaxY() + "','" + pl.getLocation().getWorld().getName() + ";" + pl.getLocation().getX() + ";" + pl.getLocation().getY() + ";" + pl.getLocation().getZ() + "','" + Mcproject.getPluginInstance().nameserver + "','" + parseInt(args[3]) + "' ) ;";
                                                 Mcproject.getPluginInstance().con.prepareStatement(stat).executeUpdate(stat);
                                                 PluginData.loadRegions();
                                                 PluginData.loadWarps();
-
                                                 Mcproject.getPluginInstance().sendReload(pl, "regions");
                                                 Mcproject.getPluginInstance().sendReload(pl, "warps");
-                                            } catch (SQLException ex) {
-                                                Logger.getLogger(ProjectFinish.class.getName()).log(Level.SEVERE, null, ex);
+
+                                            } catch (SQLException | NumberFormatException ex) {
+                                                if (ex instanceof NumberFormatException) {
+                                                    PluginData.getMessageUtil().sendErrorMessage(cs, "It should be an integer number");
+                                                } else if (ex instanceof SQLException) {
+                                                    Logger.getLogger(Mcproject.class.getName()).log(Level.SEVERE, null, ex);
+                                                }
+
                                             }
 
                                         }
@@ -203,22 +124,24 @@ public class ProjectArea extends ProjectCommand {
                                         @Override
                                         public void run() {
 
+                                            CuboidRegion r = new CuboidRegion(loc, (com.sk89q.worldedit.regions.CuboidRegion) weRegion);
+                                            Vector minCorner = r.getMinCorner();
+                                            Vector maxCorner = r.getMaxCorner();
                                             try {
-                                                CuboidRegion r = new CuboidRegion(loc, (com.sk89q.worldedit.regions.CuboidRegion) weRegion);
-                                                Vector minCorner = r.getMinCorner();
-                                                Vector maxCorner = r.getMaxCorner();
-
-                                                String stat = "INSERT INTO " + Mcproject.getPluginInstance().database + ".mcmeproject_regions_data (idproject, idregion, name, type, xlist, zlist, ymin, ymax, location, server ) VALUES"
-                                                        + " ('" + PluginData.getProjectsAll().get(args[0]).idproject.toString() + "','"
-                                                        + PluginData.createId().toString() + "','" + args[2] + "','cuboid','" + minCorner.getBlockX() + ";" + maxCorner.getBlockX() + "','" + minCorner.getBlockZ() + ";" + maxCorner.getBlockZ() + "','" + minCorner.getBlockY() + "','" + maxCorner.getBlockY() + "','" + pl.getLocation().getWorld().getUID().toString() + ";" + pl.getLocation().getX() + ";" + pl.getLocation().getY() + ";" + pl.getLocation().getZ() + "','" + Mcproject.getPluginInstance().nameserver + "' ) ;";
+                                                String stat = "INSERT INTO " + Mcproject.getPluginInstance().database + ".mcmeproject_regions_data (idproject, idregion, name, type, xlist, zlist, ymin, ymax, location, server, weight ) VALUES ('" + PluginData.getProjectsAll().get(args[0]).idproject.toString() + "','" + PluginData.createId().toString() + "','" + args[2] + "','cuboid','" + minCorner.getBlockX() + ";" + maxCorner.getBlockX() + "','" + minCorner.getBlockZ() + ";" + maxCorner.getBlockZ() + "','" + minCorner.getBlockY() + "','" + maxCorner.getBlockY() + "','" + pl.getLocation().getWorld().getName() + ";" + pl.getLocation().getX() + ";" + pl.getLocation().getY() + ";" + pl.getLocation().getZ() + "','" + Mcproject.getPluginInstance().nameserver + "','" + parseInt(args[3]) + "' ) ;";
                                                 Mcproject.getPluginInstance().con.prepareStatement(stat).executeUpdate(stat);
                                                 PluginData.loadRegions();
                                                 PluginData.loadWarps();
-
                                                 Mcproject.getPluginInstance().sendReload(pl, "regions");
                                                 Mcproject.getPluginInstance().sendReload(pl, "warps");
-                                            } catch (SQLException ex) {
-                                                Logger.getLogger(ProjectFinish.class.getName()).log(Level.SEVERE, null, ex);
+
+                                            } catch (SQLException | NumberFormatException ex) {
+                                                if (ex instanceof NumberFormatException) {
+                                                    PluginData.getMessageUtil().sendErrorMessage(cs, "It should be an integer number");
+                                                } else if (ex instanceof SQLException) {
+                                                    Logger.getLogger(Mcproject.class.getName()).log(Level.SEVERE, null, ex);
+                                                }
+
                                             }
 
                                         }
@@ -238,11 +161,15 @@ public class ProjectArea extends ProjectCommand {
                                 Logger.getLogger(ProjectArea.class.getName()).log(Level.SEVERE, null, ex);
                                 if (ex instanceof NullPointerException) {
                                     sendInvalidSelection(pl);
+                                } else if (ex instanceof IncompleteRegionException) {
+                                    sendInvalidSelection(pl);
+
                                 }
                             }
 
+                        } else {
+                            sendRegion(cs, args[2], args[0]);
                         }
-//remove
                     } else {
                         if (PluginData.regionsReadable.containsKey(PluginData.projectsAll.get(args[0]).idproject)) {
                             if (PluginData.regionsReadable.get(PluginData.projectsAll.get(args[0]).idproject).contains(args[2])) {
@@ -368,5 +295,14 @@ public class ProjectArea extends ProjectCommand {
 
     private void sendInvalidSelection(Player player) {
         PluginData.getMessageUtil().sendErrorMessage(player, "For a cuboid or polygonal area make a valid WorldEdit selection first.");
+    }
+
+    public static List<String> createList(UUID id) {
+        List<String> s = new ArrayList<>();
+
+        for (String regions : PluginData.regionsReadable.get(id)) {
+            s.add(regions.toLowerCase());
+        }
+        return s;
     }
 }

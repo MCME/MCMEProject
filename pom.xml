@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mcme</groupId>
     <artifactId>McMeProject</artifactId>
-    <version>3.5</version>
+    <version>3.7</version>
     <packaging>jar</packaging>
     <name>McMeProject</name>
     <url>http://www.mcmiddleearth.com/</url>
@@ -15,6 +15,10 @@
         <repository>
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
+        </repository>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
     <build>
@@ -77,8 +81,8 @@
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
+            <artifactId>spigot-api</artifactId>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <properties>

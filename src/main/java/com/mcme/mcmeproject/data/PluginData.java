@@ -43,6 +43,7 @@ import static java.lang.Double.parseDouble;
 import com.mcmiddleearth.pluginutil.region.CuboidRegion;
 import org.bukkit.Location;
 import com.mcmiddleearth.pluginutil.region.PrismoidRegion;
+import org.bukkit.World;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
@@ -165,6 +166,7 @@ public class PluginData {
     public static void loadRegions() {
         regions.clear();
         regionsReadable.clear();
+        regionsUUID.clear();
         new BukkitRunnable() {
 
             @Override
@@ -193,14 +195,24 @@ public class PluginData {
                                         ymax,
                                         parseInt(zlist[1]));
 
-                                Location loc = new Location(Bukkit.getWorld(UUID.fromString(location[0])), parseDouble(location[1]), parseDouble(location[2]), parseDouble(location[3]));
+                                Location loc;
 
+                                if (Mcproject.getPluginInstance().nameserver.equalsIgnoreCase(r.getString("server"))) {
+                                    loc = new Location(Bukkit.getWorld(location[0]), parseDouble(location[1]), parseDouble(location[2]), parseDouble(location[3]));
+                                } else {
+                                    loc = new Location(null,
+                                            parseDouble(location[1]), parseDouble(location[2]), parseDouble(location[3]));
+                                }
                                 CuboidRegion rr = new CuboidRegion(loc, minCorner, maxCorner);
 
-                                regions.put(r.getString("name"), new RegionData(r.getString("name"), UUID.fromString(r.getString("idregion")), UUID.fromString(r.getString("idproject")), rr, r.getString("server"), r.getString("type")));
+                                regions.put(r.getString("name"), new RegionData(r.getString("name"), UUID.fromString(r.getString("idregion")), UUID.fromString(r.getString("idproject")), rr, r.getString("server"), r.getString("type"), r.getInt("weight")));
                                 regionsUUID.put(UUID.fromString(r.getString("idregion")), r.getString("name"));
+
                                 if (regionsReadable.containsKey(UUID.fromString(r.getString("idproject")))) {
-                                    regionsReadable.get(UUID.fromString(r.getString("idproject"))).add(r.getString("name"));
+                                    List<String> s = regionsReadable.get(UUID.fromString(r.getString("idproject")));
+                                    s.add(r.getString("name"));
+                                    regionsReadable.remove(UUID.fromString(r.getString("idproject")));
+                                    regionsReadable.put(UUID.fromString(r.getString("idproject")), s);
                                 } else {
                                     List<String> l = new ArrayList();
                                     l.add(r.getString("name"));
@@ -216,13 +228,24 @@ public class PluginData {
                                 Integer ymax = r.getInt("ymax");
                                 List<Integer> xlist = StringtoListInt(unserialize(r.getString("xlist")));
                                 List<Integer> zlist = StringtoListInt(unserialize(r.getString("zlist")));
-                                Location loc = new Location(Bukkit.getWorld(UUID.fromString(location[0])), parseDouble(location[1]), parseDouble(location[2]), parseDouble(location[3]));
 
+                                Location loc;
+
+                                if (Mcproject.getPluginInstance().nameserver.equalsIgnoreCase(r.getString("server"))) {
+                                    loc = new Location(Bukkit.getWorld(location[0]), parseDouble(location[1]), parseDouble(location[2]), parseDouble(location[3]));
+                                } else {
+                                    loc = new Location(null,
+                                            parseDouble(location[1]), parseDouble(location[2]), parseDouble(location[3]));
+                                }
                                 PrismoidRegion rr = new PrismoidRegion(loc, xlist, zlist, ymin, ymax);
-                                regions.put(r.getString("name"), new RegionData(r.getString("name"), UUID.fromString(r.getString("idregion")), UUID.fromString(r.getString("idproject")), rr, r.getString("server"), r.getString("type")));
+                                regions.put(r.getString("name"), new RegionData(r.getString("name"), UUID.fromString(r.getString("idregion")), UUID.fromString(r.getString("idproject")), rr, r.getString("server"), r.getString("type"), r.getInt("weight")));
                                 regionsUUID.put(UUID.fromString(r.getString("idregion")), r.getString("name"));
+
                                 if (regionsReadable.containsKey(UUID.fromString(r.getString("idproject")))) {
-                                    regionsReadable.get(UUID.fromString(r.getString("idproject"))).add(r.getString("name"));
+                                    List<String> s = regionsReadable.get(UUID.fromString(r.getString("idproject")));
+                                    s.add(r.getString("name"));
+                                    regionsReadable.remove(UUID.fromString(r.getString("idproject")));
+                                    regionsReadable.put(UUID.fromString(r.getString("idproject")), s);
                                 } else {
                                     List<String> l = new ArrayList();
                                     l.add(r.getString("name"));
@@ -258,10 +281,16 @@ public class PluginData {
 
                     if (r.first()) {
                         do {
+                            Location l;
 
-                            Location loc = new Location(Bukkit.getWorld(UUID.fromString(r.getString("world"))), r.getFloat("x"), r.getFloat("y"), r.getFloat("z"));
-
-                            warps.put(UUID.fromString(r.getString("idregion")), new WarpData(UUID.fromString(r.getString("idproject")), UUID.fromString(r.getString("idregion")), loc, r.getString("server")));
+                            if (Mcproject.getPluginInstance().nameserver.equalsIgnoreCase(r.getString("server"))) {
+                                l = new Location(Bukkit.getWorld(r.getString("world")),
+                                        r.getFloat("x"), r.getFloat("y"), r.getFloat("z"));
+                            } else {
+                                l = new Location(null,
+                                        r.getFloat("x"), r.getFloat("y"), r.getFloat("z"));
+                            }
+                            warps.put(UUID.fromString(r.getString("idregion")), new WarpData(UUID.fromString(r.getString("idproject")), UUID.fromString(r.getString("idregion")), l, r.getString("server"), r.getString("world")));
 
                         } while (r.next());
 
@@ -291,7 +320,7 @@ public class PluginData {
                     if (r.first()) {
                         do {
 
-                            projectsAll.put(r.getString("name"), new ProjectData(r.getString("name"), UUID.fromString(r.getString("idproject")), ProjectStatus.valueOf(r.getString("status")), r.getBoolean("main"), convertListString(unserialize(r.getString("jobs"))), UUID.fromString(r.getString("staff_uuid")), r.getLong("time"), r.getInt("percentage"), r.getString("description"), r.getString("link"), r.getLong("updated"), r.getInt("minutes"), convertListUUID(unserialize(r.getString("assistants"))),convertListUUID(unserialize(r.getString("plcurrent")))));
+                            projectsAll.put(r.getString("name"), new ProjectData(r.getString("name"), UUID.fromString(r.getString("idproject")), ProjectStatus.valueOf(r.getString("status")), r.getBoolean("main"), convertListString(unserialize(r.getString("jobs"))), UUID.fromString(r.getString("staff_uuid")), r.getLong("time"), r.getInt("percentage"), r.getString("description"), r.getString("link"), r.getLong("updated"), r.getInt("minutes"), convertListUUID(unserialize(r.getString("assistants"))), convertListUUID(unserialize(r.getString("plcurrent"))), r.getInt("blocks")));
                             projectsUUID.put(UUID.fromString(r.getString("idproject")), r.getString("name"));
                         } while (r.next());
 
@@ -468,11 +497,12 @@ public class PluginData {
 
             RegionData s = regions.get(name);
 
-            if (Bukkit.getWorlds().contains(s.region.getWorld())) {
-                if (projectsAll.get(projectsUUID.get(s.idproject)).status != ProjectStatus.FINISHED || projectsAll.get(projectsUUID.get(s.idproject)).status != ProjectStatus.HIDDEN) {
+            if (Mcproject.getPluginInstance().nameserver.equalsIgnoreCase(s.server)) {
+                if (!(projectsAll.get(projectsUUID.get(s.idproject)).status.equals(ProjectStatus.FINISHED) || projectsAll.get(projectsUUID.get(s.idproject)).status.equals(ProjectStatus.HIDDEN))) {
                     if (s.type.equals("cuboid")) {
                         DynmapUtil.createMarkeronLoadCuboid(s.name, projectsUUID.get(s.idproject), (CuboidRegion) s.region);
-                    } else {
+                    }
+                    else {
                         DynmapUtil.createMarkeronLoad(s.name, projectsUUID.get(s.idproject), (PrismoidRegion) s.region);
                     }
 
@@ -483,10 +513,10 @@ public class PluginData {
 
         for (UUID name : warps.keySet()) {
             WarpData s = warps.get(name);
-            if (projectsAll.get(projectsUUID.get(s.idproject)).status != ProjectStatus.FINISHED || projectsAll.get(projectsUUID.get(s.idproject)).status != ProjectStatus.HIDDEN) {
-                if (Bukkit.getWorlds().contains(s.wl)) {
+            if (!(projectsAll.get(projectsUUID.get(s.idproject)).status.equals(ProjectStatus.FINISHED) || projectsAll.get(projectsUUID.get(s.idproject)).status.equals(ProjectStatus.HIDDEN))) {
+                if (Mcproject.getPluginInstance().nameserver.equalsIgnoreCase(s.server)) {
                     String n = regionsUUID.get(s.idregion).toUpperCase() + " (" + projectsUUID.get(s.idproject).toLowerCase() + ")";
-                    DynmapUtil.createMarkerWarp(n, s.location);
+                    DynmapUtil.createMarkerWarp(n, s.location, s.wl);
 
                 }
             }

@@ -59,7 +59,10 @@ public class SystemRunnable {
 
                                     @Override
                                     public void run() {
-                                        PluginData.loadAllDynmap();
+                                        if (!Mcproject.getPluginInstance().nameserver.equals("default")) {
+                                            PluginData.loadAllDynmap();
+
+                                        }
                                     }
 
                                 }.runTaskLater(Mcproject.getPluginInstance(), 100L);
@@ -167,7 +170,7 @@ public class SystemRunnable {
 
     }
 
-    public static void PlayersDataBlocksRunnable(Consumer<String> callback) {
+    public static void PlayersDataBlocksRunnable() {
         HashMap<UUID, PlayersData> newlist = new HashMap();
         List<UUID> totalList = new ArrayList<>();
 //idproject, idplayer
@@ -177,7 +180,7 @@ public class SystemRunnable {
             public void run() {
 
                 try {
-                    String statement = "SELECT * FROM " + Mcproject.getPluginInstance().database + ".mcmeproject_people_data;";
+                    String statement = "SELECT * FROM " + Mcproject.getPluginInstance().database + ".mcmeproject_people_data ;";
 
                     final ResultSet r = Mcproject.getPluginInstance().con.prepareStatement(statement).executeQuery();
                     for (UUID idplayer : PluginData.getTemporaryBlocks().keySet()) {
@@ -261,7 +264,7 @@ public class SystemRunnable {
                             }
                             if (testCheck2 != 0) {
                                 try {
-                                    Mcproject.getPluginInstance().con.prepareStatement(pp.toString()).executeUpdate(ss.toString());
+                                    Mcproject.getPluginInstance().con.prepareStatement(pp.toString()).executeUpdate(pp.toString());
 
                                 } catch (SQLException ex) {
                                     Logger.getLogger(SystemRunnable.class.getName()).log(Level.SEVERE, null, ex);
@@ -306,15 +309,13 @@ public class SystemRunnable {
 
                         }
                     }
-                   
-                    
-                    callback.accept("s");
-                    
+
+                    PluginData.getTemporaryBlocks().clear();
                 } catch (SQLException ex) {
                     Logger.getLogger(SystemRunnable.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }.runTaskAsynchronously(Mcproject.getPluginInstance());
+        }.runTaskTimerAsynchronously(Mcproject.getPluginInstance(), 400L, 1700L);
 
     }
 
