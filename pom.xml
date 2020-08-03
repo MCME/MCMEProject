@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mcme</groupId>
     <artifactId>McMeProject</artifactId>
-    <version>3.7.2-SNAPSHOT</version>
+    <version>3.7.5-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>McMeProject</name>
     <url>http://www.mcmiddleearth.com/</url>
@@ -47,11 +47,6 @@
             <version>2.4-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>com.mcmiddleearth</groupId>
             <artifactId>PluginUtils</artifactId>
             <version>1.2.3</version>
@@ -82,7 +77,12 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <version>1.16.1-R0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.16.1-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <properties>
