@@ -350,7 +350,8 @@ public class PluginData {
                     }
 
                     FancyMessage message = new FancyMessage(MessageType.INFO_NO_PREFIX, PluginData.getMessageUtil());
-                    message.addSimple(ChatColor.GOLD + "Hi " + pl.getName() + ", welcome to MCME " + ChatColor.BLUE + projects.get(0) + "\n" + ChatColor.GOLD + "Currently we are working on these projects");
+
+                    message.addSimple(ChatColor.GOLD + "Hi " + pl.getName() + ", welcome to MCME " + "\n" + ChatColor.GOLD + "Currently we are working on these projects");
 
                     for (Entry<String, ProjectData> pr : PluginData.getProjectsAll().entrySet()) {
 
@@ -365,7 +366,7 @@ public class PluginData {
                         }
 
                     }
-                   
+
                     message.send(pl);
 
                 } catch (SQLException ex) {

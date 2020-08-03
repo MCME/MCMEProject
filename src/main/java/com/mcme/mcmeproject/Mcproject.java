@@ -112,6 +112,8 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
     @Getter
     private PreparedStatement selectProjects;
     @Getter
+    private PreparedStatement selectPeopleDataID;
+    @Getter
     private PreparedStatement selectPeopleData;
     @Getter
     private PreparedStatement selectNewsDataId;
@@ -329,7 +331,7 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
         String insert_regions = "INSERT INTO mcmeproject_regions_data (idproject, idregion, name, type, xlist, zlist, ymin, ymax, location, server, weight ) VALUES (?,?,?,?,?,?,?,?,?,?,?) ;";
         
         String select_news_data_id = "SELECT * FROM mcmeproject_news_data WHERE player_uuid = ? AND idproject = ? ;";
-        String select_people_data = "SELECT * FROM mcmeproject_people_data WHERE idproject = ? ;";
+        String select_people_data_id = "SELECT * FROM mcmeproject_people_data WHERE idproject = ? ;";
         String select_news_bool = "SELECT * FROM mcmeproject_news_bool WHERE player_uuid = ? ;";
         String select_projects = "SELECT * FROM mcmeproject_project_data ;";
         String select_regions = "SELECT * FROM mcmeproject_regions_data ;";
@@ -337,7 +339,8 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
         String select_news_data = "SELECT * FROM mcmeproject_news_data WHERE player_uuid = ? ;";
         String select_statistic = "SELECT * FROM mcmeproject_statistics_data ;";
         String select_statistic_perday = "SELECT * FROM mcmeproject_statistics_data WHERE day = ? AND month = ? AND year = ? ;";
-        
+        String select_people_data = "SELECT * FROM mcmeproject_people_data ;";
+         
         deleteRegion = connection.prepareStatement(delete_region);
         deleteWarp = connection.prepareStatement(delete_warp);
         deleteNewsData = connection.prepareStatement(delete_news_data);
@@ -360,6 +363,7 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
         selectWarps = connection.prepareStatement(select_warps);
         selectRegions = connection.prepareStatement(select_regions);
         selectProjects = connection.prepareStatement(select_projects);
+        selectPeopleDataID = connection.prepareStatement(select_people_data_id);
         selectPeopleData = connection.prepareStatement(select_people_data);
         selectNewsDataId = connection.prepareStatement(select_news_data_id);
         selectStatistic = connection.prepareStatement(select_statistic);
@@ -384,10 +388,11 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
         selectWarps.setQueryTimeout(10);
         selectRegions.setQueryTimeout(10);
         selectProjects.setQueryTimeout(10);
-        selectPeopleData.setQueryTimeout(10);
+        selectPeopleDataID.setQueryTimeout(10);
         selectNewsDataId.setQueryTimeout(10);
         selectStatistic.setQueryTimeout(10);
         selectStatisticPerDay.setQueryTimeout(10);
+        selectPeopleData.setQueryTimeout(10);
         
     }
 
