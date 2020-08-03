@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mcme</groupId>
     <artifactId>McMeProject</artifactId>
-    <version>3.7.5-SNAPSHOT</version>
+    <version>3.7.6-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>McMeProject</name>
     <url>http://www.mcmiddleearth.com/</url>
@@ -44,7 +44,13 @@
         <dependency>
             <groupId>us.dynmap</groupId>
             <artifactId>dynmap-api</artifactId>
-            <version>2.4-SNAPSHOT</version>
+            <version>3.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.mcmiddleearth</groupId>
@@ -77,11 +83,6 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.1-R0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
             <version>1.16.1-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

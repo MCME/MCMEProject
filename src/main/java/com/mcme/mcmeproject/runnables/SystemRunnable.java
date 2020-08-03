@@ -209,6 +209,7 @@ public class SystemRunnable {
                 try {
 
                     final ResultSet r = Mcproject.getPluginInstance().getSelectPeopleData().executeQuery();
+                    
                     PluginData.getTemporaryBlocks().keySet().forEach((idplayer) -> {
                         PluginData.getTemporaryBlocks().get(idplayer).getR().keySet().forEach((idproject) -> {
                             if (!totalList.contains(idproject)) {

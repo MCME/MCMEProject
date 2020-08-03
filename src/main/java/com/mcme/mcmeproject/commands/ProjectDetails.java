@@ -93,8 +93,8 @@ public class ProjectDetails extends ProjectCommand {
                         try {
                             ProjectData pr = PluginData.getProjectsAll().get(args[0]);
 
-                            Mcproject.getPluginInstance().getSelectPeopleData().setString(1, pr.getIdproject().toString());
-                            final ResultSet r2 = Mcproject.getPluginInstance().getSelectPeopleData().executeQuery();
+                            Mcproject.getPluginInstance().getSelectPeopleDataID().setString(1, pr.getIdproject().toString());
+                            final ResultSet r2 = Mcproject.getPluginInstance().getSelectPeopleDataID().executeQuery();
 
                             Long r = (pr.getTime() - System.currentTimeMillis());
                             Long f = (System.currentTimeMillis() - pr.getUpdated());
@@ -206,8 +206,8 @@ public class ProjectDetails extends ProjectCommand {
                         try {
                             ProjectData pr = PluginData.getProjectsAll().get(args[0]);
 
-                            Mcproject.getPluginInstance().getSelectPeopleData().setString(1, pr.getIdproject().toString());
-                            final ResultSet r2 = Mcproject.getPluginInstance().getSelectPeopleData().executeQuery();
+                            Mcproject.getPluginInstance().getSelectPeopleDataID().setString(1, pr.getIdproject().toString());
+                            final ResultSet r2 = Mcproject.getPluginInstance().getSelectPeopleDataID().executeQuery();
 
                             Long r = (pr.getTime() - System.currentTimeMillis());
                             Long f = (System.currentTimeMillis() - pr.getUpdated());

@@ -116,7 +116,7 @@ public class PlayersRunnable {
                 PluginData.setTodayEnd();
             }
 
-        }.runTaskTimer(Mcproject.getPluginInstance(), 400L, 288000L);
+        }.runTaskTimer(Mcproject.getPluginInstance(), 100L, 288000L);
 
     }
 
