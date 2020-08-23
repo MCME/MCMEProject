@@ -48,6 +48,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.event.EventPriority;
 
 /**
  *
@@ -69,7 +70,7 @@ public class PlayerListener implements Listener {
     }
 
     //for update reminder
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent e) {
 
         final Player pl = e.getPlayer();
@@ -92,10 +93,11 @@ public class PlayerListener implements Listener {
             @Override
             public void run() {
                 try {
+
                     Mcproject.getPluginInstance().getSelectNewsBool().setString(1, pl.getUniqueId().toString());
 
                     final ResultSet r = Mcproject.getPluginInstance().getSelectNewsBool().executeQuery();
-
+                    System.out.println(pl.getUniqueId().toString());
                     if (PluginData.getPlayernotification()) {
                         if (r.first()) {
 

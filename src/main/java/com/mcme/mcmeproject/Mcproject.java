@@ -297,7 +297,7 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
     }
     
     private void onStart() {
-        SystemRunnable.startDatabaseRecoveryRunnable();
+        SystemRunnable.startDatabaseRecoveryRunnable(); 
         PlayersRunnable.AddMinuteRunnable();
         PlayersRunnable.SetTodayUpdatedRunnable();
         SystemRunnable.PlayersDataBlocksRunnable();

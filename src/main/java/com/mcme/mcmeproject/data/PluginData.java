@@ -131,10 +131,10 @@ public class PluginData {
 
                                 today.add(r.getString("name"));
 
-                            }
+                            }                            
                         } while (r.next());
 
-                    }
+                    }  
                 } catch (SQLException ex) {
                     Logger.getLogger(PluginData.class.getName()).log(Level.SEVERE, null, ex);
                 }
