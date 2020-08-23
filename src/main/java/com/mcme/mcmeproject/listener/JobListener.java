@@ -18,12 +18,10 @@ package com.mcme.mcmeproject.listener;
 
 import com.mcme.mcmeproject.Mcproject;
 import com.mcme.mcmeproject.data.PluginData;
-import com.mcmiddleearth.thegaffer.events.JobEndEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import com.mcmiddleearth.thegaffer.events.JobStartEvent;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,10 +51,10 @@ public class JobListener implements Listener {
                     public void run() {
 
                         try {
-                            Mcproject.getPluginInstance().getUpdateWithoutUpdated().setString(1, "jobs");
-                            Mcproject.getPluginInstance().getUpdateWithoutUpdated().setString(2, serialize(jobs));
-                            Mcproject.getPluginInstance().getUpdateWithoutUpdated().setString(3, PluginData.getProjectsAll().get(project).getIdproject().toString());
-                            Mcproject.getPluginInstance().getUpdateWithoutUpdated().executeUpdate();
+
+                            Mcproject.getPluginInstance().getSetJobs().setString(1, serialize(jobs));
+                            Mcproject.getPluginInstance().getSetJobs().setString(2, PluginData.getProjectsAll().get(project).getIdproject().toString());
+                            Mcproject.getPluginInstance().getSetJobs().executeUpdate();
                             PluginData.loadProjects();
                         } catch (SQLException ex) {
                             Logger.getLogger(JobListener.class.getName()).log(Level.SEVERE, null, ex);

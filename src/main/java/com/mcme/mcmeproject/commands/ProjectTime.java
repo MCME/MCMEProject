@@ -55,11 +55,10 @@ public class ProjectTime extends ProjectCommand {
 
                         try {
 
-                            Mcproject.getPluginInstance().getUpdateInformations().setString(1, "time");
-                            Mcproject.getPluginInstance().getUpdateInformations().setString(2, setTime(args[1], cs).toString());
-                            Mcproject.getPluginInstance().getUpdateInformations().setLong(3, System.currentTimeMillis());
-                            Mcproject.getPluginInstance().getUpdateInformations().setString(4, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
-                            Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
+                            Mcproject.getPluginInstance().getSetTime().setString(1, setTime(args[1], cs).toString());
+                            Mcproject.getPluginInstance().getSetTime().setLong(2, System.currentTimeMillis());
+                            Mcproject.getPluginInstance().getSetTime().setString(3, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
+                            Mcproject.getPluginInstance().getSetTime().executeUpdate();
                             PluginData.loadProjects();
                             bungee.sendReload(pl, "projects");
                             sendDone(cs);

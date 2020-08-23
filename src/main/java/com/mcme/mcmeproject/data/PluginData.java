@@ -131,10 +131,10 @@ public class PluginData {
 
                                 today.add(r.getString("name"));
 
-                            }                            
+                            }
                         } while (r.next());
 
-                    }  
+                    }
                 } catch (SQLException ex) {
                     Logger.getLogger(PluginData.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -366,9 +366,9 @@ public class PluginData {
                         }
 
                     }
-
-                    message.send(pl);
-
+                    if (projectsAll.size() > 0) {
+                        message.send(pl);
+                    }
                 } catch (SQLException ex) {
                     Logger.getLogger(PluginData.class.getName()).log(Level.SEVERE, null, ex);
                 }

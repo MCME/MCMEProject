@@ -109,9 +109,14 @@ public class ProjectDetails extends ProjectCommand {
                                     }
                                     message.addSimple(ChatColor.BOLD + "PROJECT: " + pr.getName() + " (Finished) ");
                                     message.addTooltipped(ChatColor.AQUA + "[...]" + "\n", ChatColor.GREEN + "Closed " + accTime(f) + " ago");
-                                    message.addSimple(ChatColor.BOLD + "Leader: " + ChatColor.DARK_PURPLE + ps + "\n"
-                                            + ChatColor.BOLD + "Assistants: " + ChatColor.DARK_PURPLE + assistantsList(pr.getAssistants()) + "\n");
-                                    message.addSimple(ChatColor.AQUA + pr.getDescription() + "\n");
+                                    message.addSimple(ChatColor.RED.BOLD + "Leader: " + ChatColor.DARK_PURPLE + ps);
+                                    if (pr.getAssistants().size() > 0) {
+                                        message.addSimple("\n" + ChatColor.BOLD + "Assistants: " + ChatColor.DARK_PURPLE + assistantsList(pr.getAssistants()) + "\n");
+                                    }
+                                    if (!pr.getDescription().equals(" ")) {
+                                        message.addSimple(ChatColor.AQUA + pr.getDescription() + "\n");
+                                    }
+
                                     message.addSimple(ChatColor.GOLD + "+--------------------+" + "\n"
                                             + ChatColor.GREEN + "-Current percentage: " + pr.getPercentage().toString() + "%" + "\n"
                                             + ChatColor.GREEN + "-Hours of work: " + Math.round(pr.getMinutes() / 60) + "\n"
@@ -125,9 +130,13 @@ public class ProjectDetails extends ProjectCommand {
                                     }
                                     message.addSimple(ChatColor.BOLD + "PROJECT: " + pr.getName() + " (Hidden) ");
                                     message.addTooltipped(ChatColor.AQUA + "[...]" + "\n", ChatColor.GREEN + "Updated " + accTime(f) + " ago");
-                                    message.addSimple(ChatColor.RED.BOLD + "Leader: " + ChatColor.DARK_PURPLE + ps + "\n"
-                                            + ChatColor.BOLD + "Assistants: " + ChatColor.DARK_PURPLE + assistantsList(pr.getAssistants()) + "\n");
-                                    message.addSimple(ChatColor.AQUA + pr.getDescription() + "\n");
+                                    message.addSimple(ChatColor.RED.BOLD + "Leader: " + ChatColor.DARK_PURPLE + ps);
+                                    if (pr.getAssistants().size() > 0) {
+                                        message.addSimple("\n" + ChatColor.BOLD + "Assistants: " + ChatColor.DARK_PURPLE + assistantsList(pr.getAssistants()) + "\n");
+                                    }
+                                    if (!pr.getDescription().equals(" ")) {
+                                        message.addSimple(ChatColor.AQUA + pr.getDescription() + "\n");
+                                    }
                                     message.addSimple(ChatColor.GOLD + "+--------------------+" + "\n"
                                             + ChatColor.GREEN + "-Current percentage: " + pr.getPercentage().toString() + "%" + "\n"
                                             + ChatColor.GREEN + "-Extimated Time: " + time(r) + "\n"
@@ -142,9 +151,13 @@ public class ProjectDetails extends ProjectCommand {
                                     }
                                     message.addSimple(ChatColor.BOLD + "PROJECT: " + pr.getName() + " ");
                                     message.addTooltipped(ChatColor.AQUA + "[...]" + "\n", ChatColor.GREEN + "Updated " + accTime(f) + " ago");
-                                    message.addSimple(ChatColor.RED.BOLD + "Leader: " + ChatColor.DARK_PURPLE + ps + "\n"
-                                            + ChatColor.BOLD + "Assistants: " + ChatColor.DARK_PURPLE + assistantsList(pr.getAssistants()) + "\n");
-                                    message.addSimple(ChatColor.AQUA + pr.getDescription() + "\n");
+                                    message.addSimple(ChatColor.RED.BOLD + "Leader: " + ChatColor.DARK_PURPLE + ps);
+                                    if (pr.getAssistants().size() > 0) {
+                                        message.addSimple("\n" + ChatColor.BOLD + "Assistants: " + ChatColor.DARK_PURPLE + assistantsList(pr.getAssistants()) + "\n");
+                                    }
+                                    if (!pr.getDescription().equals(" ")) {
+                                        message.addSimple(ChatColor.AQUA + pr.getDescription() + "\n");
+                                    }
                                     message.addSimple(ChatColor.GOLD + "+--------------------+" + "\n"
                                             + ChatColor.GREEN + "-Current percentage: " + pr.getPercentage().toString() + "%" + "\n"
                                             + ChatColor.GREEN + "-Extimated Time: " + time(r) + "\n"
@@ -219,9 +232,13 @@ public class ProjectDetails extends ProjectCommand {
                                 message.addSimple(ChatColor.DARK_RED + "Main Project of the Server" + "\n");
                                 message.addSimple(ChatColor.BOLD + "Project name: " + pr.getName() + " ");
                                 message.addTooltipped(ChatColor.AQUA + "[...]" + "\n", ChatColor.GREEN + "Updated " + accTime(f) + " ago");
-                                message.addSimple(ChatColor.RED.BOLD + "Leader: " + ChatColor.DARK_PURPLE + ps + "\n"
-                                        + ChatColor.BOLD + "Assistants: " + ChatColor.DARK_PURPLE + assistantsList(pr.getAssistants()) + "\n");
-                                message.addSimple(ChatColor.AQUA + pr.getDescription() + "\n");
+                                message.addSimple(ChatColor.RED.BOLD + "Leader: " + ChatColor.DARK_PURPLE + ps);
+                                if (pr.getAssistants().size() > 0) {
+                                    message.addSimple("\n" + ChatColor.BOLD + "Assistants: " + ChatColor.DARK_PURPLE + assistantsList(pr.getAssistants()) + "\n");
+                                }
+                                if (!pr.getDescription().equals(" ")) {
+                                    message.addSimple(ChatColor.AQUA + pr.getDescription() + "\n");
+                                }
                                 message.addSimple(ChatColor.GOLD + "+--------------------+" + "\n"
                                         + ChatColor.GREEN + "-Current percentage: " + pr.getPercentage().toString() + "%" + "\n"
                                         + ChatColor.GREEN + "-Extimated Time: " + time(r) + "\n"
@@ -234,9 +251,13 @@ public class ProjectDetails extends ProjectCommand {
 
                                 message.addSimple(ChatColor.BOLD + "Project name: " + pr.getName() + " ");
                                 message.addTooltipped(ChatColor.AQUA + "[...]" + "\n", ChatColor.GREEN + "Updated " + accTime(f) + " ago");
-                                message.addSimple(ChatColor.RED.BOLD + "Leader: " + ChatColor.DARK_PURPLE + ps + "\n"
-                                        + ChatColor.BOLD + "Assistants: " + ChatColor.DARK_PURPLE + assistantsList(pr.getAssistants()) + "\n");
-                                message.addSimple(ChatColor.AQUA + pr.getDescription() + "\n");
+                                message.addSimple(ChatColor.RED.BOLD + "Leader: " + ChatColor.DARK_PURPLE + ps);
+                                if (pr.getAssistants().size() > 0) {
+                                    message.addSimple("\n" + ChatColor.BOLD + "Assistants: " + ChatColor.DARK_PURPLE + assistantsList(pr.getAssistants()) + "\n");
+                                }
+                                if (!pr.getDescription().equals(" ")) {
+                                    message.addSimple(ChatColor.AQUA + pr.getDescription() + "\n");
+                                }
                                 message.addSimple(ChatColor.GOLD + "+--------------------+" + "\n"
                                         + ChatColor.GREEN + "-Current percentage: " + pr.getPercentage().toString() + "%" + "\n"
                                         + ChatColor.GREEN + "-Extimated Time: " + time(r) + "\n"

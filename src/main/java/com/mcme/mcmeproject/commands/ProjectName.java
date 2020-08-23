@@ -54,11 +54,10 @@ public class ProjectName extends ProjectCommand {
 
                             try {
 
-                                Mcproject.getPluginInstance().getUpdateInformations().setString(1, "name");
-                                Mcproject.getPluginInstance().getUpdateInformations().setString(2, args[1]);
-                                Mcproject.getPluginInstance().getUpdateInformations().setString(3, String.valueOf(System.currentTimeMillis()));
-                                Mcproject.getPluginInstance().getUpdateInformations().setString(4, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
-                                Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
+                                Mcproject.getPluginInstance().getSetName().setString(1, args[1]);
+                                Mcproject.getPluginInstance().getSetName().setString(2, String.valueOf(System.currentTimeMillis()));
+                                Mcproject.getPluginInstance().getSetName().setString(3, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
+                                Mcproject.getPluginInstance().getSetName().executeUpdate();
 
                                 PluginData.loadProjects();
                                 bungee.sendReload(pl, "projects");

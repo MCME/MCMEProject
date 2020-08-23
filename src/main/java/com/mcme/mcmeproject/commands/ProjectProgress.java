@@ -120,11 +120,10 @@ public class ProjectProgress extends ProjectCommand {
 
                                 try {
 
-                                    Mcproject.getPluginInstance().getUpdateInformations().setString(1, "time");
-                                    Mcproject.getPluginInstance().getUpdateInformations().setString(2, setTime(args[2], cs).toString());
-                                    Mcproject.getPluginInstance().getUpdateInformations().setLong(3, System.currentTimeMillis());
-                                    Mcproject.getPluginInstance().getUpdateInformations().setString(4, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
-                                    Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
+                                    Mcproject.getPluginInstance().getSetTime().setString(1, setTime(args[2], cs).toString());
+                                    Mcproject.getPluginInstance().getSetTime().setLong(2, System.currentTimeMillis());
+                                    Mcproject.getPluginInstance().getSetTime().setString(3, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
+                                    Mcproject.getPluginInstance().getSetTime().executeUpdate();
 
                                     Mcproject.getPluginInstance().getDeleteNewsData().setString(1, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
                                     Mcproject.getPluginInstance().getDeleteNewsData().executeUpdate();
@@ -150,11 +149,10 @@ public class ProjectProgress extends ProjectCommand {
 
                                     try {
 
-                                        Mcproject.getPluginInstance().getUpdateInformations().setString(1, "percentage");
-                                        Mcproject.getPluginInstance().getUpdateInformations().setString(2, args[1].substring(0, args[1].length() - 1));
-                                        Mcproject.getPluginInstance().getUpdateInformations().setLong(3, System.currentTimeMillis());
-                                        Mcproject.getPluginInstance().getUpdateInformations().setString(4, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
-                                        Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
+                                        Mcproject.getPluginInstance().getSetPercentage().setString(1, args[1].substring(0, args[1].length() - 1));
+                                        Mcproject.getPluginInstance().getSetPercentage().setLong(2, System.currentTimeMillis());
+                                        Mcproject.getPluginInstance().getSetPercentage().setString(3, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
+                                        Mcproject.getPluginInstance().getSetPercentage().executeUpdate();
 
                                         Mcproject.getPluginInstance().getDeleteNewsData().setString(1, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
                                         Mcproject.getPluginInstance().getDeleteNewsData().executeUpdate();
@@ -181,13 +179,11 @@ public class ProjectProgress extends ProjectCommand {
                                     public void run() {
 
                                         try {
-                                            String stat = "UPDATE mcmeproject_project_data SET percentage = '" + args[1] + "', updated = '" + System.currentTimeMillis() + "' WHERE idproject = '" + PluginData.getProjectsAll().get(args[0]).getIdproject().toString() + "' ;";
 
-                                            Mcproject.getPluginInstance().getUpdateInformations().setString(1, "percentage");
-                                            Mcproject.getPluginInstance().getUpdateInformations().setString(2, args[1]);
-                                            Mcproject.getPluginInstance().getUpdateInformations().setLong(3, System.currentTimeMillis());
-                                            Mcproject.getPluginInstance().getUpdateInformations().setString(4, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
-                                            Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
+                                            Mcproject.getPluginInstance().getSetPercentage().setString(1, args[1]);
+                                            Mcproject.getPluginInstance().getSetPercentage().setLong(2, System.currentTimeMillis());
+                                            Mcproject.getPluginInstance().getSetPercentage().setString(3, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
+                                            Mcproject.getPluginInstance().getSetPercentage().executeUpdate();
 
                                             Mcproject.getPluginInstance().getDeleteNewsData().setString(1, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
                                             Mcproject.getPluginInstance().getDeleteNewsData().executeUpdate();
@@ -214,10 +210,10 @@ public class ProjectProgress extends ProjectCommand {
 
                                 try {
 
-                                    Mcproject.getPluginInstance().getUpdateWithoutUpdated().setString(1, "percentage");
-                                    Mcproject.getPluginInstance().getUpdateWithoutUpdated().setLong(2, System.currentTimeMillis());
-                                    Mcproject.getPluginInstance().getUpdateWithoutUpdated().setString(3, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
-                                    Mcproject.getPluginInstance().getUpdateWithoutUpdated().executeUpdate();
+                                    Mcproject.getPluginInstance().getSetOnlyUpdate().setLong(1, System.currentTimeMillis());
+                                    Mcproject.getPluginInstance().getSetOnlyUpdate().setString(2, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
+                                    Mcproject.getPluginInstance().getSetOnlyUpdate().executeUpdate();
+                                    
                                     PluginData.loadProjects();
                                     sendDone(cs, args[0]);
                                     bungee.sendReload(pl, "projects");

@@ -72,13 +72,11 @@ public class ProjectAdd extends ProjectCommand {
                                     if (Bukkit.getOfflinePlayer(args[1]).hasPlayedBefore()) {
                                         final List<UUID> assist = p.getAssistants();
                                         assist.add(n.getUniqueId());
-                                        String s = serialize(assist);
 
-                                        Mcproject.getPluginInstance().getUpdateInformations().setString(1, "assistants");
-                                        Mcproject.getPluginInstance().getUpdateInformations().setString(2, s);
-                                        Mcproject.getPluginInstance().getUpdateInformations().setLong(3, System.currentTimeMillis());
-                                        Mcproject.getPluginInstance().getUpdateInformations().setString(4, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
-                                        Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
+                                        Mcproject.getPluginInstance().getSetAssistants().setString(1, serialize(assist));
+                                        Mcproject.getPluginInstance().getSetAssistants().setLong(2, System.currentTimeMillis());
+                                        Mcproject.getPluginInstance().getSetAssistants().setString(3, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
+                                        Mcproject.getPluginInstance().getSetAssistants().executeUpdate();
                                         PluginData.loadProjects();
 
                                         bungee.sendReload(pl, "projects");

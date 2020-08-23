@@ -47,7 +47,7 @@ public class ProjectPercentage extends ProjectCommand {
             Player pl = (Player) cs;
             if (utils.playerPermission(args[0], cs)) {
                 if (args[1].endsWith("%")) {
-                    
+
                     sendPercentage(args, pl, args[1].substring(0, args[1].length() - 1), cs);
 
                 } else {
@@ -97,11 +97,11 @@ public class ProjectPercentage extends ProjectCommand {
             public void run() {
 
                 try {
-                    Mcproject.getPluginInstance().getUpdateInformations().setString(1, "percentage");
-                    Mcproject.getPluginInstance().getUpdateInformations().setString(2, percentage);
-                    Mcproject.getPluginInstance().getUpdateInformations().setLong(3, System.currentTimeMillis());
-                    Mcproject.getPluginInstance().getUpdateInformations().setString(4, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
-                    Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
+
+                    Mcproject.getPluginInstance().getSetPercentage().setString(1, percentage);
+                    Mcproject.getPluginInstance().getSetPercentage().setLong(2, System.currentTimeMillis());
+                    Mcproject.getPluginInstance().getSetPercentage().setString(3, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
+                    Mcproject.getPluginInstance().getSetPercentage().executeUpdate();
 
                     PluginData.loadProjects();
                     bungee.sendReload(pl, "projects");

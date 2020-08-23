@@ -73,13 +73,11 @@ public class ProjectRemove extends ProjectCommand {
                                 final List<UUID> assist = p.getAssistants();
 
                                 assist.remove(uuid);
-                                
-                                Mcproject.getPluginInstance().getUpdateInformations().setString(1, "assistants");
-                                Mcproject.getPluginInstance().getUpdateInformations().setString(2, serialize(assist));
-                                Mcproject.getPluginInstance().getUpdateInformations().setLong(3, System.currentTimeMillis());
-                                Mcproject.getPluginInstance().getUpdateInformations().setString(4, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
-                                Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
-                                
+
+                                Mcproject.getPluginInstance().getSetAssistants().setString(1, serialize(assist));
+                                Mcproject.getPluginInstance().getSetAssistants().setLong(2, System.currentTimeMillis());
+                                Mcproject.getPluginInstance().getSetAssistants().setString(3, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
+                                Mcproject.getPluginInstance().getSetAssistants().executeUpdate();
                                 sendManager(cs, args[1]);
                                 PluginData.loadProjects();
                                 bungee.sendReload(pl, "projects");
