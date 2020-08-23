@@ -57,7 +57,9 @@ public class utils {
         List<UUID> list = new ArrayList();
 
         for (String item : s) {
-            list.add(UUID.fromString(item));
+            if (item.matches("/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/")) {
+                list.add(UUID.fromString(item));
+            }
         }
 
         return list;
