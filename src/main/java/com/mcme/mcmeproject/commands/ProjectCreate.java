@@ -57,18 +57,10 @@ public class ProjectCreate extends ProjectCommand {
                         Mcproject.getPluginInstance().getInsertProject().setString(2, args[0]);
                         Mcproject.getPluginInstance().getInsertProject().setString(3, pl.getUniqueId().toString());
                         Mcproject.getPluginInstance().getInsertProject().setLong(4, System.currentTimeMillis());
-                        Mcproject.getPluginInstance().getInsertProject().setString(5, "0");
-                        Mcproject.getPluginInstance().getInsertProject().setString(6, "nothing");
-                        Mcproject.getPluginInstance().getInsertProject().setLong(7, System.currentTimeMillis());
-                        Mcproject.getPluginInstance().getInsertProject().setString(8, " ");
-                        Mcproject.getPluginInstance().getInsertProject().setLong(9, System.currentTimeMillis());
-                        Mcproject.getPluginInstance().getInsertProject().setString(10, ProjectStatus.HIDDEN.name().toUpperCase());
-                        Mcproject.getPluginInstance().getInsertProject().setString(11, "0");
-                        Mcproject.getPluginInstance().getInsertProject().setString(12, " ");
-                        Mcproject.getPluginInstance().getInsertProject().setString(13, "0");
-                        Mcproject.getPluginInstance().getInsertProject().setString(14, "0");
-                        Mcproject.getPluginInstance().getInsertProject().setString(15, " ");
-                        Mcproject.getPluginInstance().getInsertProject().setString(16, " ");
+                        Mcproject.getPluginInstance().getInsertProject().setLong(5, System.currentTimeMillis());
+                        Mcproject.getPluginInstance().getInsertProject().setLong(6, System.currentTimeMillis());
+                        Mcproject.getPluginInstance().getInsertProject().setString(7, ProjectStatus.HIDDEN.name().toUpperCase());
+
                         Mcproject.getPluginInstance().getInsertProject().executeUpdate();
                         sendCreated(cs, args[0]);
                         PluginData.loadProjects();
