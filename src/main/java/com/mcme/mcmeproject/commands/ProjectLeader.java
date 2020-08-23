@@ -59,11 +59,11 @@ public class ProjectLeader extends ProjectCommand {
                         public void run() {
 
                             try {
-                                Mcproject.getPluginInstance().getUpdateInformations().setString(1, "staff_uuid");
-                                Mcproject.getPluginInstance().getUpdateInformations().setString(2, uuid.toString());
-                                Mcproject.getPluginInstance().getUpdateInformations().setLong(3, System.currentTimeMillis());
-                                Mcproject.getPluginInstance().getUpdateInformations().setString(4, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
-                                Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
+
+                                Mcproject.getPluginInstance().getSetLeader().setString(1, uuid.toString());
+                                Mcproject.getPluginInstance().getSetLeader().setLong(2, System.currentTimeMillis());
+                                Mcproject.getPluginInstance().getSetLeader().setString(3, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
+                                Mcproject.getPluginInstance().getSetLeader().executeUpdate();
                                 PluginData.loadProjects();
                                 bungee.sendReload(pl, "projects");
 

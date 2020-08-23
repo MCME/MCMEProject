@@ -53,11 +53,10 @@ public class ProjectLink extends ProjectCommand {
 
                         try {
 
-                            Mcproject.getPluginInstance().getUpdateInformations().setString(1, "link");
-                            Mcproject.getPluginInstance().getUpdateInformations().setString(2, args[1]);
-                            Mcproject.getPluginInstance().getUpdateInformations().setLong(3, System.currentTimeMillis());
-                            Mcproject.getPluginInstance().getUpdateInformations().setString(4, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
-                            Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
+                            Mcproject.getPluginInstance().getSetLink().setString(1, args[1]);
+                            Mcproject.getPluginInstance().getSetLink().setLong(2, System.currentTimeMillis());
+                            Mcproject.getPluginInstance().getSetLink().setString(3, PluginData.getProjectsAll().get(args[0]).getIdproject().toString());
+                            Mcproject.getPluginInstance().getSetLink().executeUpdate();
                             PluginData.loadProjects();
                             bungee.sendReload(pl, "projects");
 

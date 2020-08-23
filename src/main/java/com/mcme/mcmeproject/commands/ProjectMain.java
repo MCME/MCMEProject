@@ -67,11 +67,10 @@ public class ProjectMain extends ProjectCommand {
 
                                     try {
 
-                                        Mcproject.getPluginInstance().getUpdateInformations().setString(1, "main");
-                                        Mcproject.getPluginInstance().getUpdateInformations().setString(2, "1");
-                                        Mcproject.getPluginInstance().getUpdateInformations().setLong(3, System.currentTimeMillis());
-                                        Mcproject.getPluginInstance().getUpdateInformations().setString(4, pr.getIdproject().toString());
-                                        Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
+                                        Mcproject.getPluginInstance().getSetMain().setString(1, "1");
+                                        Mcproject.getPluginInstance().getSetMain().setLong(2, System.currentTimeMillis());
+                                        Mcproject.getPluginInstance().getSetMain().setString(3, pr.getIdproject().toString());
+                                        Mcproject.getPluginInstance().getSetMain().executeUpdate();
 
                                         sendDone(cs, args[0]);
                                         PluginData.loadProjects();
@@ -97,12 +96,11 @@ public class ProjectMain extends ProjectCommand {
                             public void run() {
 
                                 try {
-                                    Mcproject.getPluginInstance().getUpdateInformations().setString(1, "main");
-                                    Mcproject.getPluginInstance().getUpdateInformations().setString(2, "0");
-                                    Mcproject.getPluginInstance().getUpdateInformations().setLong(3, System.currentTimeMillis());
-                                    Mcproject.getPluginInstance().getUpdateInformations().setString(4, pr.getIdproject().toString());
-                                    Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
-                                    
+                                    Mcproject.getPluginInstance().getSetMain().setString(1, "0");
+                                    Mcproject.getPluginInstance().getSetMain().setLong(2, System.currentTimeMillis());
+                                    Mcproject.getPluginInstance().getSetMain().setString(3, pr.getIdproject().toString());
+                                    Mcproject.getPluginInstance().getSetMain().executeUpdate();
+
                                     sendDoneOff(cs, args[0]);
                                     PluginData.loadProjects();
                                     bungee.sendReload(pl, "projects");

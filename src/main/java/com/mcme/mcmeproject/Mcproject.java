@@ -47,7 +47,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author Fraspace5
  */
 public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHandler {
-    
+
     static final Logger Logger = Bukkit.getLogger();
     @Getter
     private final ConsoleCommandSender clogger = this.getServer().getConsoleSender();
@@ -65,14 +65,14 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
     /**
      *
      */
-    
+
     @Setter
     @Getter
     private String nameserver;
-    
+
     @Getter
     private static Mcproject pluginInstance;
-    
+
     @Getter
     private PreparedStatement insertRegion;
     @Getter
@@ -86,13 +86,29 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
     @Getter
     private PreparedStatement updateNews;
     @Getter
-    private PreparedStatement updateProgress;
-    @Getter
     private PreparedStatement updateStatus;
     @Getter
-    private PreparedStatement updateInformations;
+    private PreparedStatement updateProgress;
     @Getter
-    private PreparedStatement updateWithoutUpdated;
+    private PreparedStatement setTime;
+    @Getter
+    private PreparedStatement setDescription;
+    @Getter
+    private PreparedStatement setAssistants;
+    @Getter
+    private PreparedStatement setName;
+    @Getter
+    private PreparedStatement setPercentage;
+    @Getter
+    private PreparedStatement setLeader;
+    @Getter
+    private PreparedStatement setLink;
+    @Getter
+    private PreparedStatement setOnlyUpdate;
+    @Getter
+    private PreparedStatement setMain;
+    @Getter
+    private PreparedStatement setJobs;
     @Getter
     private PreparedStatement insertWarp;
     @Getter
@@ -121,7 +137,7 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
     private PreparedStatement selectStatistic;
     @Getter
     private PreparedStatement selectStatisticPerDay;
-    
+
     @Override
     public void onEnable() {
         pluginInstance = this;
@@ -132,33 +148,33 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
         } catch (SQLException ex) {
             clogger.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.BLUE + "MCMEProject" + ChatColor.DARK_GRAY + "] - " + ChatColor.RED + "Database error! (McMeProject)");
             Bukkit.getPluginManager().disablePlugin(this);
-            
+
         }
-        
+
         getCommand("project").setExecutor(new ProjectCommandExecutor());
         getCommand("project").setTabCompleter(new ProjectCommandExecutor());
-        
+
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new bungee());
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
         Bukkit.getPluginManager().registerEvents(new JobListener(), this);
-        
+
         clogger.sendMessage(ChatColor.GREEN + "---------------------------------------");
         clogger.sendMessage(ChatColor.BLUE + "MCMEProject Plugin v" + this.getDescription().getVersion() + " enabled!");
         clogger.sendMessage(ChatColor.GREEN + "---------------------------------------");
-        
+
         if (this.isEnabled()) {
             Mcproject.getPluginInstance().setNameserver("default");
             onStart();
             SystemRunnable.ConnectionRunnable();
-            
+
         }
-        
+
     }
-    
+
     @Override
     public void onDisable() {
-        
+
         clogger.sendMessage(ChatColor.RED + "---------------------------------------");
         clogger.sendMessage(ChatColor.BLUE + "MCMEProject Plugin v" + this.getDescription().getVersion() + " disabled!");
         clogger.sendMessage(ChatColor.RED + "---------------------------------------");
@@ -168,7 +184,7 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
             Logger.getLogger(Mcproject.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void openConnection() throws SQLException {
         if (connection != null && !connection.isClosed()) {
             return;
@@ -178,7 +194,7 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
             Bukkit.getPluginManager().disablePlugin(this);
         } else {
             new BukkitRunnable() {
-                
+
                 @Override
                 public void run() {
                     try {
@@ -188,7 +204,7 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
                                 Mcproject.getPluginInstance().username,
                                 Mcproject.getPluginInstance().password);
                         clogger.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.BLUE + "MCMEProject" + ChatColor.DARK_GRAY + "] - " + ChatColor.GREEN + "Database Found! ");
-                        
+
                         String st1 = "CREATE TABLE IF NOT EXISTS `" + Mcproject.getPluginInstance().database + "`.`mcmeproject_news_data` (\n"
                                 + "  `player_uuid` VARCHAR(50) NOT NULL,\n"
                                 + "  `idproject` VARCHAR(50) NOT NULL);";
@@ -249,87 +265,95 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
                                 + "  `minutes` INT ,\n"
                                 + "  `projects` LONGTEXT ,\n"
                                 + "  `players` LONGTEXT );";
-                        
+
                         connection.createStatement().execute(st1);
                         connection.createStatement().execute(st2);
                         connection.createStatement().execute(st3);
-                        
+
                         new BukkitRunnable() {
-                            
+
                             @Override
                             public void run() {
-                                
+
                                 try {
-                                    
+
                                     connection.createStatement().execute(st5);
                                     connection.createStatement().execute(st6);
                                     connection.createStatement().execute(st7);
                                 } catch (SQLException ex) {
                                     Logger.getLogger(Mcproject.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                                
+
                             }
-                            
+
                         }.runTaskLater(Mcproject.getPluginInstance(), 40L);
                         new BukkitRunnable() {
-                            
+
                             @Override
                             public void run() {
-                                
+
                                 try {
                                     connection.createStatement().execute(st8);
                                     prepareStatements();
                                 } catch (SQLException ex) {
                                     Logger.getLogger(Mcproject.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                                
+
                             }
-                            
+
                         }.runTaskLater(Mcproject.getPluginInstance(), 40L);
-                        
+
                     } catch (SQLException ex) {
                         Logger.getLogger(Mcproject.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }.runTaskAsynchronously(Mcproject.getPluginInstance());
         }
-        
+
     }
-    
+
     private void onStart() {
-        SystemRunnable.startDatabaseRecoveryRunnable(); 
+        SystemRunnable.startDatabaseRecoveryRunnable();
         PlayersRunnable.AddMinuteRunnable();
         PlayersRunnable.SetTodayUpdatedRunnable();
         SystemRunnable.PlayersDataBlocksRunnable();
         SystemRunnable.variableDataMinutesRunnable();
         SystemRunnable.variableDataBlocksRunnable();
         SystemRunnable.statisticAllRunnable();
-        
+
     }
 
     /**
      * Prepare Statements for SQL database
      */
     private void prepareStatements() throws SQLException {
-        
+
         String delete_region = "DELETE FROM mcmeproject_regions_data WHERE idregion = ? ;";
         String delete_warp = "DELETE FROM mcmeproject_warps_data WHERE idregion = ? ;";
         String delete_news_data = "DELETE FROM mcmeproject_news_data WHERE idproject = ? ;";
-        
+
         String update_status_finish = "UPDATE mcmeproject_project_data SET status = ?, main = 0, endDate = ?, updated = ? WHERE idproject = ? ;";
         String update_news_bool = "UPDATE mcmeproject_news_bool SET bool = ? WHERE player_uuid = ? ;";
         String update_progress = "UPDATE mcmeproject_project_data SET percentage = ?, time = ?, updated = ? WHERE idproject = ? ;";
         String update_status = "UPDATE mcmeproject_project_data SET status = ?, endDate ?, updated = ? WHERE idproject = ? ;";
-        String update_set = "UPDATE mcmeproject_project_data SET ? = ?, updated = ? WHERE idproject = ? ;";
-        String update_no_updated = "UPDATE mcmeproject_project_data SET ? = ? WHERE idproject = ? ;";
         //Set easy
+
+        String set_only_update = "UPDATE mcmeproject_project_data SET updated = ? WHERE idproject = ? ;";
+        String set_assistants = "UPDATE mcmeproject_project_data SET assistants = ?, updated = ? WHERE idproject = ? ;";
+        String set_description = "UPDATE mcmeproject_project_data SET description = ?, updated = ? WHERE idproject = ? ;";
+        String set_leader = "UPDATE mcmeproject_project_data SET staff_uuid = ?, updated = ? WHERE idproject = ? ;";
+        String set_link = "UPDATE mcmeproject_project_data SET link = ?, updated = ? WHERE idproject = ? ;";
+        String set_main = "UPDATE mcmeproject_project_data SET main = ?, updated = ? WHERE idproject = ? ;";
+        String set_percentage = "UPDATE mcmeproject_project_data SET percentage = ?, updated = ? WHERE idproject = ? ;";
+        String set_time = "UPDATE mcmeproject_project_data SET time = ?, updated = ? WHERE idproject = ? ;";
+        String set_jobs = "UPDATE mcmeproject_project_data SET jobs = ? WHERE idproject = ? ;";
 
         String insert_warp = "INSERT INTO mcmeproject_warps_data (idproject, idregion, world, server, x, y, z ) VALUES (?,?,?,?,?,?,?) ;";
         String insert_project = "INSERT INTO mcmeproject_project_data (idproject, name, staff_uuid, startDate, percentage, link, time, description, updated, status, main, jobs, minutes, endDate, assistants, plcurrent) VALUES (?, ?, ?, ?, '0', 'nothing',?, ' ',?, ?, 0, ' ', '0', '0', ' ', ' ') ;";
         String insert_news_data = "INSERT INTO mcmeproject_news_data (idproject, player_uuid) VALUES (?,?) ;";
         String insert_news_bool = "INSERT INTO mcmeproject_news_bool (bool, player_uuid) VALUES(?,?);";
         String insert_regions = "INSERT INTO mcmeproject_regions_data (idproject, idregion, name, type, xlist, zlist, ymin, ymax, location, server, weight ) VALUES (?,?,?,?,?,?,?,?,?,?,?) ;";
-        
+
         String select_news_data_id = "SELECT * FROM mcmeproject_news_data WHERE player_uuid = ? AND idproject = ? ;";
         String select_people_data_id = "SELECT * FROM mcmeproject_people_data WHERE idproject = ? ;";
         String select_news_bool = "SELECT * FROM mcmeproject_news_bool WHERE player_uuid = ? ;";
@@ -340,24 +364,32 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
         String select_statistic = "SELECT * FROM mcmeproject_statistics_data ;";
         String select_statistic_perday = "SELECT * FROM mcmeproject_statistics_data WHERE day = ? AND month = ? AND year = ? ;";
         String select_people_data = "SELECT * FROM mcmeproject_people_data ;";
-         
+
         deleteRegion = connection.prepareStatement(delete_region);
         deleteWarp = connection.prepareStatement(delete_warp);
         deleteNewsData = connection.prepareStatement(delete_news_data);
-        
+
         updateFinish = connection.prepareStatement(update_status_finish);
         updateNews = connection.prepareStatement(update_news_bool);
         updateProgress = connection.prepareStatement(update_progress);
         updateStatus = connection.prepareStatement(update_status);
-        updateInformations = connection.prepareStatement(update_set);
-        updateWithoutUpdated = connection.prepareStatement(update_no_updated);
-        
+
+        setAssistants = connection.prepareStatement(set_assistants);
+        setDescription = connection.prepareStatement(set_description);
+        setLeader = connection.prepareStatement(set_leader);
+        setLink = connection.prepareStatement(set_link);
+        setMain = connection.prepareStatement(set_main);
+        setPercentage = connection.prepareStatement(set_percentage);
+        setTime = connection.prepareStatement(set_time);
+        setJobs = connection.prepareStatement(set_time);
+        setOnlyUpdate = connection.prepareStatement(set_only_update);
+
         insertWarp = connection.prepareStatement(insert_warp);
         insertProject = connection.prepareStatement(insert_project);
         insertNewsData = connection.prepareStatement(insert_news_data);
         insertNewsBool = connection.prepareStatement(insert_news_bool);
         insertRegion = connection.prepareStatement(insert_regions);
-        
+
         selectNewsData = connection.prepareStatement(select_news_data);
         selectNewsBool = connection.prepareStatement(select_news_bool);
         selectWarps = connection.prepareStatement(select_warps);
@@ -368,16 +400,26 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
         selectNewsDataId = connection.prepareStatement(select_news_data_id);
         selectStatistic = connection.prepareStatement(select_statistic);
         selectStatisticPerDay = connection.prepareStatement(select_statistic_perday);
-        
+
         deleteRegion.setQueryTimeout(10);
         deleteWarp.setQueryTimeout(10);
         deleteNewsData.setQueryTimeout(10);
-        updateWithoutUpdated.setQueryTimeout(10);
+
         updateFinish.setQueryTimeout(10);
         updateNews.setQueryTimeout(10);
         updateProgress.setQueryTimeout(10);
         updateStatus.setQueryTimeout(10);
-        updateInformations.setQueryTimeout(10);
+
+        setAssistants.setQueryTimeout(10);
+        setDescription.setQueryTimeout(10);
+        setLeader.setQueryTimeout(10);
+        setLink.setQueryTimeout(10);
+        setMain.setQueryTimeout(10);
+        setPercentage.setQueryTimeout(10);
+        setTime.setQueryTimeout(10);
+        setJobs.setQueryTimeout(10);
+        setOnlyUpdate.setQueryTimeout(10);
+
         insertWarp.setQueryTimeout(10);
         insertProject.setQueryTimeout(10);
         insertNewsData.setQueryTimeout(10);
@@ -393,7 +435,7 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
         selectStatistic.setQueryTimeout(10);
         selectStatisticPerDay.setQueryTimeout(10);
         selectPeopleData.setQueryTimeout(10);
-        
+
     }
 
     /**
@@ -414,5 +456,5 @@ public class Mcproject extends JavaPlugin implements Listener, ExternalProjectHa
     public Set<String> getProjectNames() {
         return PluginData.getProjectsAll().keySet();
     }
-    
+
 }

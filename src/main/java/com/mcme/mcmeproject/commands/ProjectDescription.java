@@ -111,11 +111,10 @@ public class ProjectDescription extends ProjectCommand {
 
                     try {
 
-                        Mcproject.getPluginInstance().getUpdateInformations().setString(1, "description");
-                        Mcproject.getPluginInstance().getUpdateInformations().setString(2, description);
-                        Mcproject.getPluginInstance().getUpdateInformations().setLong(3, System.currentTimeMillis());
-                        Mcproject.getPluginInstance().getUpdateInformations().setString(4, PluginData.getProjectsAll().get(name).getIdproject().toString());
-                        Mcproject.getPluginInstance().getUpdateInformations().executeUpdate();
+                        Mcproject.getPluginInstance().getSetDescription().setString(1, description);
+                        Mcproject.getPluginInstance().getSetDescription().setLong(2, System.currentTimeMillis());
+                        Mcproject.getPluginInstance().getSetDescription().setString(3, PluginData.getProjectsAll().get(name).getIdproject().toString());
+                        Mcproject.getPluginInstance().getSetDescription().executeUpdate();
 
                         PluginData.loadProjects();
                         bungee.sendReload(pl, "projects");
